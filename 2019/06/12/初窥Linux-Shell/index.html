@@ -1,0 +1,440 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="keywords" content="Yose-San, 五七柒"><meta name="author" content="Yose-San"><meta name="description" content="Linux系统运维之：初窥Linux Shell"><meta name="copyright" content="Yose-San"><title>Linux系统运维之：初窥Linux Shell | 五七柒</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="/css/index.css?v=1.0.0-beta.0"><link rel="icon" type="image/png" sizes="32x32" href="/imgs/favicon-32x32-stun.png?v=1.0.0-beta.0"><link rel="icon" type="image/png" sizes="16x16" href="/imgs/favicon-16x16-stun.png?v=1.0.0-beta.0"></head><body><div id="container"><header id="header"><nav class="header-nav"><div class="header-nav-inner"><div class="header-nav-menu-icon fa fa-bars"></div><div class="header-nav-search"><i class="fa fa-search"></i><span>Search</span></div><div class="header-nav-menu"><span><a href="/"><i class="fa fa-home"></i>首页</a></span><span><a href="/archives/"><i class="fa fa-folder-open"></i>归档</a></span><span><a href="/categories/"><i class="fa fa-th"></i>分类</a></span><span><a href="/tags/"><i class="fa fa-tags"></i>标签</a></span><span><a href="/about/"><i class="fa fa-user"></i>关于</a></span></div></div></nav><div class="header-info"><div class="header-info-inner"><div class="site-info-title">五七柒</div><div class="site-info-subtitle"></div></div></div></header><main id="main"><div class="main-inner"><aside id="sidebar"><div class="sidebar-inner"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-overview">站点概览</span></div><section class="sidebar-toc " style="
+        white-space: normal;
+        word-break: break-all;
+    "><div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Shell命令详解与Linux目录结构（重点）"><span class="toc-number">1.</span> <span class="toc-text">Shell命令详解与Linux目录结构（重点）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux目录结构"><span class="toc-number">1.1.</span> <span class="toc-text">Linux目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux常用命令"><span class="toc-number">1.2.</span> <span class="toc-text">Linux常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux中获得命令帮助"><span class="toc-number">1.3.</span> <span class="toc-text">Linux中获得命令帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux命令详解"><span class="toc-number">1.4.</span> <span class="toc-text">Linux命令详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录操作"><span class="toc-number">1.4.1.</span> <span class="toc-text">目录操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件操作命令"><span class="toc-number">1.4.2.</span> <span class="toc-text">文件操作命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件内容操作命令"><span class="toc-number">1.4.3.</span> <span class="toc-text">文件内容操作命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#归档及压缩命令"><span class="toc-number">1.4.4.</span> <span class="toc-text">归档及压缩命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#别名"><span class="toc-number">1.4.5.</span> <span class="toc-text">别名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#补充命令："><span class="toc-number">1.4.6.</span> <span class="toc-text">补充命令：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#重定向与管道符"><span class="toc-number">2.</span> <span class="toc-text">重定向与管道符</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#重定向"><span class="toc-number">2.1.</span> <span class="toc-text">重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#管道"><span class="toc-number">2.2.</span> <span class="toc-text">管道</span></a></li></ol></li></ol></div></section><section class="sidebar-overview hide"><div class="sidebar-author"><img class="sidebar-author-avatar" src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1560330924907&amp;di=e38554e4719351cc9f99bd6e98d29e19&amp;imgtype=0&amp;src=http%3A%2F%2Fcdnimg103.lizhi.fm%2Faudio_cover%2F2016%2F11%2F30%2F2571168099373673991_320x320.jpg" alt="avatar" style="
+              border-radius: 50%;
+              opacity: 1;
+            "><p class="sidebar-author-motto">所有向死而生的生命都热烈生长</p></div><div class="sidebar-social"><span class="
+                icon-only
+               sidebar-social-item"><a href="https://github.com/" target="_blank" title="github → https://github.com/"><i class="fa fa-github"></i></a></span><span class="
+                icon-only
+               sidebar-social-item"><a href="yournumber" target="_blank" title="qq → yournumber"><i class="fa fa-qq"></i></a></span></div><div class="sidebar-state"><div class="sidebar-state-item sidebar-state-posts"><a href="/archives/"><div class="sidebar-state-item-count">2</div><div class="sidebar-state-item-name">文章</div></a></div><div class="sidebar-state-item sidebar-state-categories"><a href="/categories/"><div class="sidebar-state-item-count">0</div><div class="sidebar-state-item-name">分类</div></a></div><div class="sidebar-state-item sidebar-state-tags"><a href="/tags/"><div class="sidebar-state-item-count">2</div><div class="sidebar-state-item-name">标签</div></a></div></div><div class="sidebar-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank"><img src="/imgs/cc-by-nc-sa.svg" alt="creative commons"></a></div></section><div class="sidebar-progress"><div class="sidebar-progress-read"><span>你已阅读了</span><span class="sidebar-progress-number"></span></div><div class="sidebar-progress-line" style="
+          background-color: #49b1f5;
+          height: 1px;
+        "></div></div></div></aside><article id="post"><div class="main-content code-highlight"><header class="post-header"><h1 class="post-title">Linux系统运维之：初窥Linux Shell</h1><div class="post-meta"><span class="post-meta-create"><span>发表于 </span><span>2019-06-12</span></span><span class="dot">&bull;</span><span class="post-meta-word"><span>字数统计 </span><span>TODO</span></span><span class="dot">&bull;</span><span class="post-meta-read"><span>热度 </span><span>TODO</span></span></div></header><div class="post-body"><h1 id="Shell命令详解与Linux目录结构（重点）"><a href="#Shell命令详解与Linux目录结构（重点）" class="headerlink" title="Shell命令详解与Linux目录结构（重点）"></a>Shell命令详解与Linux目录结构（重点）</h1><ul>
+<li><p>Linux精髓在于命令行</p>
+</li>
+<li><p>Linux命令的通用命令格式</p>
+<pre><code>命令字 [选项] [参数]</code></pre><ul>
+<li><p>选项：用于调节命令的具体功能</p>
+<ul>
+<li>分类：<ul>
+<li>“-“  引导短格式选项(单个字符) EX: “-l”</li>
+<li>“–” 引导长格式选项(多个字符) EX: “–color”</li>
+<li>多个短格式选项可以写在一起 EX: -a -l -z -x –&gt; -alzx</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>参数：命令操作的对象，有文件、目录等 </p>
+<pre><code>EX: ls -l /home</code></pre><h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2></li>
+<li><p>boot：存放系统引导文件和内核文件</p>
+</li>
+<li><p>bin: 存放可执行文件(二进制文件)(ls,cat,mkdir)</p>
+</li>
+<li><p>sbin：root用户执行命令</p>
+</li>
+<li><p>home：普通用户家目录</p>
+</li>
+<li><p>root：root用户家目录</p>
+</li>
+<li><p>dev：存放所有设备文件(外设)</p>
+<pre><code>如：/dev/md*  /dev/sd* /dev/hd* .......</code></pre></li>
+<li><p>etc：存放所有配置文件(服务)</p>
+</li>
+<li><p>lib/lib64：动态链接库文件(共享库文件) lib64目录普通用户不可操作，类似于.dll</p>
+</li>
+<li><p>media：媒体库文件</p>
+</li>
+<li><p>opt：文件安装目录，安装软件就在opt目录下</p>
+</li>
+<li><p>mnt：挂载点目录</p>
+<pre><code>mount * *</code></pre></li>
+<li><p>var：存放一些需要改变数据的文件，如日志、某些大文件的溢出区</p>
+</li>
+<li><p>proc：虚拟文件系统目录，放的是内存的一个映射</p>
+<ul>
+<li><p>可查看一些信息和设备运行状态</p>
+<pre><code># cat /proc/cpuinfo         //查看cpu运行状态
+# cat /proc/meminfo         //查看内存运行状态
+# cat /proc/version         //查看系统版本
+
+[root@love ~]# uname -m       //查看cpu架构
+  x86_64
+[root@love ~]# uname -r       //查看内核版本
+  3.10.0-862.11.6.el7.x86_64
+[root@love ~]# uname -a       //查看所有
+  Linux love 3.10.0-862.11.6.el7.x86_64 #1 SMP Tue Aug 14 21:49:04 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux</code></pre></li>
+</ul>
+</li>
+<li><p>usr：最大的目录，只有用到的目录或者文件都在这</p>
+<pre><code>/usr/sbin
+/usr/doclinux</code></pre></li>
+<li><p>tmp：共享文件夹，临时目录</p>
+</li>
+<li><p>lost+found：非正常关机时才会有，平时为空，保存意外掉电的内存中数据</p>
+</li>
+<li><p>注：Linux中，以.开头的文件为隐藏文件</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Linux常用命令"><a href="#Linux常用命令" class="headerlink" title="Linux常用命令"></a>Linux常用命令</h2><pre><code>- 目录操作命令
+    - ls, cd, pwd, mkdir, rmdir  
+- 文件操作命令
+    - touch, cp, mv, rm, find
+- 文件内容操作命令
+    - cat, less, head, tail, grep 
+- 归档及压缩命令
+    - tar</code></pre><h2 id="Linux中获得命令帮助"><a href="#Linux中获得命令帮助" class="headerlink" title="Linux中获得命令帮助"></a>Linux中获得命令帮助</h2><ul>
+<li><p>help：用于内部命令查找，如 cd, kill….共56条命令</p>
+<pre><code># help cd </code></pre></li>
+<li><p>–help：适用于大多数外部命令，如 ls</p>
+<pre><code>ls --help</code></pre></li>
+<li><p>使用man手册进行命令查看(man：命令阅读手册)</p>
+<pre><code>[root@love]# man 命令字
+  上下键滚动文本
+  Page down &amp; Page Up上下翻页
+  空格翻页
+  /查找内容</code></pre></li>
+<li><p>info 也可进行命令帮助查找(使用与man接近)</p>
+</li>
+<li><p>pinfo 命令名称 ——以浏览器形式查看详细的GUN信息</p>
+</li>
+<li><p>/usr/share/doc    #所有已安装软件的说明文件</p>
+<pre><code># firefox file:///usr/share/doc</code></pre></li>
+</ul>
+<h2 id="Linux命令详解"><a href="#Linux命令详解" class="headerlink" title="Linux命令详解"></a>Linux命令详解</h2><h3 id="目录操作"><a href="#目录操作" class="headerlink" title="目录操作"></a>目录操作</h3><ul>
+<li><p>cd命令：切换工作目录</p>
+<pre><code># cd [目录位置]
+
+  绝对路径: cd /home/student
+  相对路径: 
+            cd .       //当前路径
+            cd ..     //返回上级目录
+            cd -      //回到上一次工作所在目录
+            cd ../../     //回到上一级的上一级目录
+            cd [~]      //返回家目录
+            cd ~/Document</code></pre></li>
+<li><p>pwd：查看当前所在的工作目录(告诉你自己在哪)</p>
+</li>
+<li><p>ls：列出当前目录下的文件或目录</p>
+<ul>
+<li>格式：# ls [选项] [目录或文件名]</li>
+<li>选项：<ul>
+<li>-l    以长格式显示</li>
+<li>-a    显示所有文件目录信息，包括隐藏文件</li>
+<li>-d    显示目录本身的属性</li>
+<li>-h    显示详细信息，变换了统计单位</li>
+<li>–color   以颜色区分不同类型的文件</li>
+<li>注:   ll == ls -l</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>mkdir：创建一个新目录</p>
+<pre><code>格式：# mkdir [选项-p] [路径] 目录名
+
+mkdir -p: 递归创建多级目录
+[root@love ~]# mkdir /test/adir/bdir/cdir/ddir/edir -p</code></pre></li>
+<li><p>rmdir: 删除一个空目录</p>
+<pre><code>rmdir -p a/b/c/       //递归删除一个目录</code></pre></li>
+</ul>
+<h3 id="文件操作命令"><a href="#文件操作命令" class="headerlink" title="文件操作命令"></a>文件操作命令</h3><ul>
+<li><p>touch：创建一个空文件，更新文件时间标记</p>
+<pre><code>格式：# touch filename</code></pre><p>  注意：在Linux中，不以后缀名区分文件</p>
+</li>
+<li><p>echo：打印某个东西，说什么就是什么</p>
+<pre><code>[root@love]# echo &quot;hello world&quot;
+hello world
+
+# 重定向写
+echo &quot;hello world&quot; &gt; a.txt</code></pre><p>  实验：在A目录里面，创建一个a.txt文件，写入几句话，然后在当前目录下继续创建一个a.txt文件，文件的内容还在吗</p>
+</li>
+<li><p>cp: 复制文件或目录</p>
+<pre><code>格式：cp [选项] 源文件/源目录  目标文件/目标目录
+
+[root@love]# pwd
+/root/bb
+
+eg. cp /root/aa/a.txt /root/bb/
+    cp ../aa/a.txt .</code></pre><ul>
+<li>选项<ul>
+<li>-r：递归复制整个目录树</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>rm 删除文件或目录</p>
+<pre><code>格式：    rm [选项] 文件或目录</code></pre><ul>
+<li><p>选项</p>
+<ul>
+<li>-r 递归删除整个目录树</li>
+<li>-f 不进行确认，强制删除</li>
+<li>-rf 使用万分谨慎</li>
+</ul>
+</li>
+<li><p>从删库到跑路(心有多大，路就有多远)</p>
+<pre><code>rm -rf /</code></pre></li>
+</ul>
+</li>
+<li><p>mv:移动文件或者目录</p>
+<pre><code>格式：mv [选项] 源文件/目录   目标文件/目录</code></pre><ul>
+<li><p>若移动目标位置与源位置相同(当前下操作)，则此操作相当于重命名(改名)</p>
+<pre><code>eg.   mv text text-1</code></pre></li>
+</ul>
+</li>
+<li><p>find：用于查找文件或者目录</p>
+<ul>
+<li><p>格式：    find [查找范围] [查找条件]</p>
+</li>
+<li><p>查找条件：</p>
+<ul>
+<li><p>-name: 按文件名查找</p>
+<pre><code># find /root -name *ks*</code></pre></li>
+<li><p>-type: 按文件类型查找</p>
+<ul>
+<li><p>f 普通文件</p>
+</li>
+<li><p>d 目录</p>
+</li>
+<li><p>b 块设备文件</p>
+</li>
+<li><p>c 字符设备文件</p>
+</li>
+<li><p>-user: 按文件属主查找</p>
+<pre><code># find / -user student*  -type f -name text</code></pre></li>
+</ul>
+</li>
+<li><p>size：按文件大小进行查找</p>
+<pre><code># find /var/ -size +10k -type f   //查找/var目录下大于10k的普通文件</code></pre><p>  实验：在/var目录下查找大于100k，小于110k的文件</p>
+</li>
+<li><p>a：逻辑与</p>
+</li>
+<li><p>o：逻辑或</p>
+</li>
+<li><p>!：逻辑非</p>
+<pre><code># find / ! -name temp -type f
+# find / -name anaconda-ks.cfg -o -name initial-setup-ks.cfg</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件内容操作命令"><a href="#文件内容操作命令" class="headerlink" title="文件内容操作命令"></a>文件内容操作命令</h3><ul>
+<li><p>cat：文件内容查看，显示出文件的全部内容</p>
+<pre><code>格式： cat filename</code></pre></li>
+<li><p>less(more)：全屏方式分页显示文件内容，more与less用法一致，只多了一个百分比显示</p>
+<pre><code>格式:less/more  filename</code></pre><p>   按回车键逐行滚动，按空格键向下翻页，按b键向上翻页，按q键退出，按/后输入内容进行查找</p>
+</li>
+<li><p>head(头部)：显示文件头部若干行，默认10行</p>
+<pre><code>格式： head[选项] filename
+
+eg.  head -n 5 filename   //查看文件前5行</code></pre></li>
+<li><p>tail(尾部)：显示文件尾部若干行，默认10行</p>
+<pre><code>格式： tail[选项] filename
+
+eg.  tail -n 5 filename //查看文件后5行</code></pre><p>  注：-n后的 + - 代表意思不同</p>
+</li>
+<li><p>wc：统计文件内容的…，默认情况下统计结果为：行数 词数 字节数</p>
+<pre><code>格式：wc [选项] filename</code></pre><ul>
+<li><p>选项：</p>
+<ul>
+<li><p>-w 统计字数   一个字被定义为有空白、跳格、换行为分隔的字符串</p>
+</li>
+<li><p>-l 行数</p>
+</li>
+<li><p>-c 字节数</p>
+</li>
+<li><p>-m 字符数 不能与-c一起使用</p>
+</li>
+<li><p>-L 打印最长行的长度</p>
+</li>
+<li><p>man wc</p>
+</li>
+<li><p>man –help</p>
+</li>
+<li><p>man -version</p>
+<pre><code>eg.   wc -lcwL initial-setup-ks.cfg</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>grep：在文件中查找并显示包含制定字符串的行</p>
+<pre><code>格式：    grep [选项] 查找条件 目标文件
+
+eg.   grep &apos;boot&apos; initial-setup-ks.cfg</code></pre><ul>
+<li><p>选项：</p>
+<ul>
+<li><p>-c：显示匹配行的数量</p>
+</li>
+<li><p>-i：查找时不区分大小写</p>
+</li>
+<li><p>-v：反转查找</p>
+<pre><code>[root@love ~]# grep &apos;boot&apos; initial-setup-ks.cfg -c -v
+  58
+[root@love ~]# grep &apos;boot&apos; initial-setup-ks.cfg -c
+  7</code></pre></li>
+</ul>
+</li>
+<li><p>查找条件设置：</p>
+<ul>
+<li><p>1.查找条件用引号引起来</p>
+</li>
+<li><p>2.”^XXXX”表示以XXXX开头</p>
+</li>
+<li><p>4.”XXXX$”表示以XXXX结尾</p>
+</li>
+<li><p>5.”^#”表示匹配空行</p>
+<pre><code>[root@love ~]# grep -c &apos;^$&apos; initial-setup-ks.cfg
+  6
+[root@love ~]# grep -cv &apos;^$&apos; initial-setup-ks.cfg
+  59
+[root@love ~]# grep &apos;^#&apos; initial-setup-ks.cfg
+
+[root@love ~]# grep &apos;ation$&apos; initial-setup-ks.cfg</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="归档及压缩命令"><a href="#归档及压缩命令" class="headerlink" title="归档及压缩命令"></a>归档及压缩命令</h3><ul>
+<li><p>tar：压缩与解压缩 制作归档文件和释放归档文件，包括.gz和.bz2两种格式</p>
+<pre><code>格式： 
+
+  - 制作归档文件：
+      tar [选项] [目录] 归档文件名 源文件或者目录
+
+  - 释放归档文件：
+      tar [选项] 归档文件 [-c目标文件]
+
+eg.
+
+  - 压缩：
+      tar -czvf [存放路径] 归档文件名.tar.gz 源文件或者目录
+      tar -cjvf [存放路径] 归档文件名.tar.bz2 源文件或者目录
+
+      -c 压缩     -z压缩为.gz格式     -vf显示详细信息
+
+  - 解压缩
+      tar -xzvf [存放路径] 归档文件名.tar.gz [-c 解压目录]
+      tar -xzvf [存放路径] 归档文件名.tar.bz2 [-c 解压目录]
+
+      -x 解压
+      若不加&quot;-c 路径&quot;则解压到当前目录</code></pre><h3 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h3></li>
+<li><p>alias：别名：为使用频率较高的命令设置简短的调用名称</p>
+<ul>
+<li><p>查看当前用户所有别名</p>
+<ul>
+<li>格式：alias [别名]</li>
+</ul>
+</li>
+<li><p>设置别名</p>
+<ul>
+<li><p>格式：alias 别名=”实际要执行的命令”</p>
+<pre><code>eg.   alis htpc=&quot;vi /etc/httpd/config/httpd.config&quot;</code></pre></li>
+</ul>
+</li>
+<li><p>取消别名</p>
+<ul>
+<li>格式：<ul>
+<li>unalias aa</li>
+<li>unalias -a    //取消所有别名</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>以上别名只在当前Bash环境中生效，若想永久生效，则：</p>
+<ul>
+<li>1.将别名设置在~/.bashrc文件中</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="补充命令："><a href="#补充命令：" class="headerlink" title="补充命令："></a>补充命令：</h3><ul>
+<li>ln –link 链接<ul>
+<li>链接有两种：<ul>
+<li>软链接      ln -s 源文件  目标文件</li>
+<li>硬链接      ln  源文件  目标文件<ul>
+<li>硬链接相当于cp -p + 同步更新</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>Shell 暂告一段落</strong></p>
+<h1 id="重定向与管道符"><a href="#重定向与管道符" class="headerlink" title="重定向与管道符"></a>重定向与管道符</h1><h2 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h2><ul>
+<li><p>作用：将命令的执行结果输出到制定的文件中，而不是直接显示在屏幕上</p>
+<ul>
+<li><p>0：标准输入 键盘 stdin 仅读取</p>
+</li>
+<li><p>1：标准输出 终端 stdout 仅写入</p>
+</li>
+<li><p>2：标准错误 终端 stderr 仅写入</p>
+</li>
+<li><p>3+ filename 其他文件 读/写</p>
+</li>
+<li><p>在Linux中构建了一个带有编号标记的通道（文件描述符）的进程结构来管理打开文件  通过进程连接到文件，进行文件数据的操作</p>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>操作符</th>
+<th>用途</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>重定向标准输出</td>
+<td>[1]&gt;</td>
+<td>将命令的执行结果输出到指定文件中，而不是显示在屏幕上，覆盖写</td>
+<td>history &gt; history.txt \\ find / -user yuxiang &gt;history.txt</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>[1]&gt;&gt;</td>
+<td>标准输出，追加写</td>
+</tr>
+<tr>
+<td>重定向标准错误</td>
+<td>2&gt;</td>
+<td>将标准错误信息保存到指定文件中，进行覆盖写</td>
+<td>find / -user yuxiang 2&gt; errors.txt</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>2&gt;&gt;</td>
+<td>将标准错误信息保存到指定文件中，进行追加写</td>
+</tr>
+<tr>
+<td>重定向标准输出和标准错误</td>
+<td>&amp;&gt; or &amp;&gt;&gt;</td>
+<td>将标准输出和标准错误输出全部保存到一个文件中</td>
+<td>find / -user yuxiang 2&gt;&gt; resault.txt</td>
+</tr>
+<tr>
+<td>*特殊</td>
+<td>&gt; &gt; or &gt;&gt; &gt;&gt; or &gt;&gt; &gt;</td>
+<td>将输出和错误分别保存到文件中</td>
+<td>find / -user yuxiang &gt; true.txt 2&gt; false.txt \\ find / -user yuxiang &gt; true.txt 2&gt;&gt; false.txt</td>
+</tr>
+</tbody></table>
+<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><ul>
+<li><p>即传送，操作符为 |  ,就是将管道前面输出的结果作为后面语句的条件执行</p>
+<pre><code>语句1 | 语句2 ...
+eg. # ls -l /usr/bin/ | more
+    # find / -name root | find -size +10k | grep &quot;pings&quot;
+
+注：管道符无上限</code></pre></li>
+</ul>
+</div><footer class="post-footer"><div class="post-footer-copyright"><div class="copyright-author"><span class="copyright-name">本文作者:</span><span class="copyright-value"><a href="http://57q.top">Yose-San</a></span></div><div class="copyright-link"><span class="copyright-name">本文链接:</span><span class="copyright-value"><a href="http://57q.top/2019/06/12/初窥Linux-Shell/">http://57q.top/2019/06/12/初窥Linux-Shell/</a></span></div><div class="copyright-notice"><span class="copyright-name">版权声明:</span><span class="copyright-value">本博客所有文章除特别声明外，均采用  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-footer-tags"><span><a href="http://57q.top/tags/Linux运维/" title="Linux运维">Linux运维</a></span></div><div id="reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qr qr-hide"><span class="reward-qr-alipay"><img src="http://ys-i.ys168.com/603642732/k5U5H386HH7N8Jllhiko/alipay.png"><div class="reward-qr-alipay-text">支付宝打赏</div></span><span class="reward-qr-wechat"><img src="http://ys-i.ys168.com/603642729/jmfmjko4T4J633KK6M7K/wechat.png"><div class="reward-qr-wechat-text">微信打赏</div></span></div></div><nav id="paginator"><div class="post-paginator"><div class="article-next pull-right"><a href="/2019/06/12/HTML入门-html4_xhtml/"><span>WEB前端之：HTML入门</span></a></div></div></nav></footer></div></article></div></main><footer id="footer"><div class="footer-inner"><div><span>&copy; 2019</span><span class="fa fa-heart heart-beat footer-separator" style="color: #ff0000"></span><span>Yose-San</span></div><div><span>Hosted by <a href="https://pages.github.com/" rel="noopener" target="_blank">Github Pages</a></span></div></div></footer><div id="back-top"><div class="back-top-inner" title="回到顶部"><i class="fa fa-rocket"></i></div></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="/js/utils.js?v=1.0.0-beta.0"></script><script src="/js/scroll.js?v=1.0.0-beta.0"></script><script src="/js/header.js?v=1.0.0-beta.0"></script><script src="/js/sidebar.js?v=1.0.0-beta.0"></script><script src="/js/post.js?v=1.0.0-beta.0"></script></body></html>

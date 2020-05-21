@@ -627,7 +627,7 @@ code {
   color: #fff;
 }
 #sidebar {
-  float: left;
+  float: right;
 }
 #sidebar {
   width: 300px;
@@ -1338,7 +1338,7 @@ code {
 .home-content,
 .main-content-layout,
 .main-content {
-  float: right;
+  margin: 0 auto;
 }
 .home-content {
   font-size: 16px;
